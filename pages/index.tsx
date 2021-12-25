@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import EncryptionItem, {EncryptionItemType} from "../components/encryption-item";
+import IconLink, {IconLinkIcon} from "../components/icon-link";
 
 export default function Home() {
   return (
@@ -18,8 +18,14 @@ export default function Home() {
         </div>
         <p className='text-gray-500 mb-2'>Easily share one-time encrypted files or text</p>
         <div className="bg-white overflow-hidden shadow rounded-md">
-          <div className="px-4 py-5 sm:p-6">
+          <div className="flex px-4 py-5 space-x-4">
+            <EncryptionItem type={EncryptionItemType.file} />
+            <EncryptionItem type={EncryptionItemType.text} />
           </div>
+        </div>
+        <div className='flex items-center justify-center mt-3'>
+          <IconLink type={IconLinkIcon.github} link="https://github.com/alexcatch" />
+          <IconLink type={IconLinkIcon.linkedin} link="https://www.linkedin.com/in/alex-catch/" />
         </div>
       </div>
     </div>
