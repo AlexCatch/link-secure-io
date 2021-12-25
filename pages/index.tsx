@@ -3,7 +3,7 @@ import IconLink, {IconLinkIcon} from "../components/icon-link";
 
 export default function Home() {
   return (
-    <div className='flex h-full w-full justify-center items-center bg-gray-100'>
+    <div className='flex h-full w-full justify-center items-center bg-gray-100 p-4'>
       <div className='flex flex-col'>
         <div className='flex'>
           <div className='flex items-center justify-center'>
@@ -18,7 +18,7 @@ export default function Home() {
         </div>
         <p className='text-gray-500 mb-2'>Easily share one-time encrypted files or text</p>
         <div className="bg-white overflow-hidden shadow rounded-md">
-          <div className="flex px-4 py-5 space-x-4">
+          <div className="flex items-center justify-center flex-col sm:flex-row px-4 py-5 space-x-0 sm:space-x-4 space-y-4 sm:space-y-0">
             <EncryptionItem type={EncryptionItemType.file} />
             <EncryptionItem type={EncryptionItemType.text} />
           </div>
