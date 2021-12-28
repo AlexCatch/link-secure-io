@@ -1,15 +1,16 @@
 import React, {useMemo} from "react";
+import Link from 'next/link';
 
 export enum EncryptionItemType {
   file,
   text
 }
 
-interface EncryptionItemProps extends React.HTMLAttributes<HTMLButtonElement> {
+type EncryptionItemProps = {
   type: EncryptionItemType;
 }
 
-const EncryptionItem: React.FC<EncryptionItemProps> = ({ type, ...props }) => {
+const EncryptionItem: React.FC<EncryptionItemProps> = ({ type }) => {
   // Determine which SVG to use dependent on the type passed in
   const iconSVG = useMemo(() => {
     switch (type) {
@@ -37,11 +38,22 @@ const EncryptionItem: React.FC<EncryptionItemProps> = ({ type, ...props }) => {
     }
   }, [type]);
 
+  const itemLink = useMemo(() => {
+    switch (type) {
+      case EncryptionItemType.text:
+        return "/encrypt/text";
+      case EncryptionItemType.file:
+        return "/encrypt/file";
+    }
+  }, [type]);
+
   return (
-    <button className='flex p-4 w-52 h-32 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600' {...props}>
-      {iconSVG}
-      <p data-testid="encryption-item-text" className='text-center text-white mt-2 font-semibold'>{itemText}</p>
-    </button>
+    <Link href={itemLink}>
+      <a className='w-full sm:w-56 flex flex-1 p-4 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600'>
+        {iconSVG}
+        <p data-testid="encryption-item-text" className='text-center text-white mt-2 font-semibold'>{itemText}</p>
+      </a>
+    </Link>
   );
 };
 
