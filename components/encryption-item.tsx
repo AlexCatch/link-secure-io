@@ -5,11 +5,11 @@ export enum EncryptionItemType {
   text
 }
 
-type EncryptionItemProps = {
+interface EncryptionItemProps extends React.HTMLAttributes<HTMLButtonElement> {
   type: EncryptionItemType;
 }
 
-const EncryptionItem: React.FC<EncryptionItemProps> = ({ type }) => {
+const EncryptionItem: React.FC<EncryptionItemProps> = ({ type, ...props }) => {
   // Determine which SVG to use dependent on the type passed in
   const iconSVG = useMemo(() => {
     switch (type) {
@@ -31,17 +31,17 @@ const EncryptionItem: React.FC<EncryptionItemProps> = ({ type }) => {
   const itemText = useMemo(() => {
     switch (type) {
       case EncryptionItemType.text:
-        return "Encrypt some text"
+        return "Encrypt some text";
       case EncryptionItemType.file:
-        return "Encrypt a file"
+        return "Encrypt a file";
     }
   }, [type]);
 
   return (
-    <div className='flex p-4 w-52 h-32 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600'>
+    <button className='flex p-4 w-52 h-32 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600' {...props}>
       {iconSVG}
       <p data-testid="encryption-item-text" className='text-center text-white mt-2 font-semibold'>{itemText}</p>
-    </div>
+    </button>
   );
 };
 

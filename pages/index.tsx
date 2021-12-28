@@ -1,7 +1,39 @@
-import EncryptionItem, {EncryptionItemType} from "../components/encryption-item";
+import {EncryptionItemType} from "../components/encryption-item";
 import IconLink, {IconLinkIcon} from "../components/icon-link";
+import EncryptionItemSelect from "../components/encryption-item-select";
+import {useCallback, useMemo, useState} from "react";
+
+enum CurrentViewState {
+  select,
+  file,
+  text
+}
 
 export default function Home() {
+  const [currentState, setCurrentState] = useState<CurrentViewState>(CurrentViewState.select);
+
+  const onItemSelected = useCallback((item: EncryptionItemType) => {
+    switch (item) {
+      case EncryptionItemType.text:
+        setCurrentState(CurrentViewState.text);
+        break;
+      case EncryptionItemType.file:
+        setCurrentState(CurrentViewState.file);
+        break;
+    }
+  }, []);
+
+  const currentRenderItem = useMemo(() => {
+    switch (currentState) {
+      case CurrentViewState.file:
+        return <h1>file</h1>;
+      case CurrentViewState.select:
+        return <EncryptionItemSelect itemSelected={onItemSelected} />;
+      case CurrentViewState.text:
+        return <h1>text</h1>;
+    }
+  }, [currentState, onItemSelected]);
+
   return (
     <div className='flex h-full w-full justify-center items-center bg-gray-100 p-4'>
       <div className='flex flex-col'>
@@ -18,10 +50,7 @@ export default function Home() {
         </div>
         <p className='text-gray-500 mb-2'>Easily share one-time encrypted files or text</p>
         <div className="bg-white overflow-hidden shadow rounded-md">
-          <div className="flex items-center justify-center flex-col sm:flex-row px-4 py-5 space-x-0 sm:space-x-4 space-y-4 sm:space-y-0">
-            <EncryptionItem type={EncryptionItemType.file} />
-            <EncryptionItem type={EncryptionItemType.text} />
-          </div>
+          {currentRenderItem}
         </div>
         <div className='flex items-center justify-center mt-3'>
           <IconLink type={IconLinkIcon.github} link="https://github.com/alexcatch" />
