@@ -29,7 +29,7 @@ const PageWrapper: React.FC = ({ children }) => {
         </div>
       </div>
       <Link href="https://netlify.com">
-        <a className='absolute bottom-5 w-24'>
+        <a target="_blank" rel="noreferrer" className='absolute bottom-5 w-24'>
           <img src="https://www.netlify.com/img/global/badges/netlify-dark.svg" alt="Deploys by Netlify" />
         </a>
       </Link>
