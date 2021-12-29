@@ -7,7 +7,7 @@ const File: React.FC = () => {
   return (
     <PageWrapper>
       <div className="flex flex-col px-4 py-4 w-full">
-        <div className="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+        <div className="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-400 border-dashed rounded-md">
           <div className="space-y-1 text-center">
             <svg
               className="mx-auto h-12 w-12 text-gray-400"
@@ -23,20 +23,20 @@ const File: React.FC = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <div className="flex text-sm text-gray-600">
+            <div className="flex text-sm">
               <label
                 htmlFor="file-upload"
-                className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                className="relative cursor-pointer font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 outline-none"
               >
                 <span>Upload a file</span>
                 <input id="file-upload" name="file-upload" type="file" className="sr-only" />
               </label>
               <p className="pl-1">or drag and drop</p>
             </div>
-            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+            <p className="text-xs">PNG, JPG, GIF up to 10MB</p>
           </div>
         </div>
-        <p className="mt-2 text-sm text-gray-500">Files are encrypted client-side, generated links will work for 24 hours and are
+        <p className="mt-2 text-sm">Files are encrypted client-side, generated links will work for 24 hours and are
           visible only one time before being deleted.</p>
         <div className='flex justify-between items-center mt-2'>
           <GoBackButton />

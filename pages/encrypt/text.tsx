@@ -12,7 +12,7 @@ const Text: React.FC = () => {
           id="about"
           name="about"
           rows={8}
-          className="w-full resize-none p-3 shadow-sm block w-full focus:ring-indigo-400 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-gray-700"
+          className="w-full resize-none dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300 outline-none dark:focus:border-indigo-400 p-3 shadow-sm block w-full focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-gray-700"
         />
         <p className="mt-2 text-sm text-gray-500">Text is encrypted client-side, generated links will work for 24 hours and are
           visible only one time before being deleted.</p>
