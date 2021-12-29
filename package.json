@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "classnames": "^2.3.1",
     "faunadb": "^4.4.1",
     "graphql-request": "^3.7.0",
     "joi": "^17.5.0",

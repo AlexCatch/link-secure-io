@@ -49,7 +49,7 @@ const EncryptionItem: React.FC<EncryptionItemProps> = ({ type }) => {
 
   return (
     <Link href={itemLink}>
-      <a className='w-full sm:w-56 flex flex-1 p-4 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600'>
+      <a className='flex flex-1 p-4 flex-col items-center justify-center bg-indigo-500 rounded-lg cursor-pointer hover:bg-indigo-600'>
         {iconSVG}
         <p data-testid="encryption-item-text" className='text-center text-white mt-2 font-semibold'>{itemText}</p>
       </a>
