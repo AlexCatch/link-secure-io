@@ -28,6 +28,11 @@ const PageWrapper: React.FC = ({ children }) => {
           <IconLink type={IconLinkIcon.linkedin} link="https://www.linkedin.com/in/alex-catch/" />
         </div>
       </div>
+      <Link href="https://netlify.com">
+        <a className='absolute bottom-5 w-24'>
+          <img src="https://www.netlify.com/img/global/badges/netlify-dark.svg" alt="Deploys by Netlify" />
+        </a>
+      </Link>
     </div>
   );
 };
