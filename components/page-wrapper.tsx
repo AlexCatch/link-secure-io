@@ -24,7 +24,7 @@ const PageWrapper: React.FC = ({ children }) => {
           {children}
         </div>
         <div className='flex items-center justify-center mt-3'>
-          <IconLink type={IconLinkIcon.github} link="https://github.com/alexcatch" />
+          <IconLink type={IconLinkIcon.github} link="https://github.com/AlexCatch/link-secure-io" />
           <IconLink type={IconLinkIcon.linkedin} link="https://www.linkedin.com/in/alex-catch/" />
         </div>
       </div>
