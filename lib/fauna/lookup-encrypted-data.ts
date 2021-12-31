@@ -1,4 +1,4 @@
-import {query} from "faunadb";
+import {Collection, Get, Let, Ref, Select, Var} from "faunadb";
 import client from "./client";
 
 export type EncryptedData = {
@@ -12,21 +12,21 @@ export type EncryptedData = {
  * @param id
  */
 const lookupEncryptedData = (id: string): Promise<EncryptedData> => {
-  return client.query(
-    query.Let(
+  return client.query<EncryptedData>(
+    Let(
       {
-        doc: query.Get(
-          query.Ref(
-            query.Collection("encrypted_data"), id)
+        doc: Get(
+          Ref(
+            Collection("encrypted_data"), id)
         ),
       },
       {
-        "id": query.Select(["ref", "id"], query.Var("doc")),
-        "data": query.Select(["data", "data"], query.Var("doc")),
-        "type": query.Select(["data", "type"], query.Var("doc")),
+        "id": Select(["ref", "id"], Var("doc")),
+        "data": Select(["data", "data"], Var("doc")),
+        "type": Select(["data", "type"], Var("doc")),
       }
     )
-  )
+  );
 };
 
 export {

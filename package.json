@@ -9,21 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "axios": "^0.24.0",
     "classnames": "^2.3.1",
     "crypto-js": "^4.1.1",
     "faunadb": "^4.4.1",
     "graphql-request": "^3.7.0",
     "joi": "^17.5.0",
+    "luxon": "^2.2.0",
     "next": "12.0.7",
     "next-joi": "^2.2.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@types/crypto-js": "^4.1.0",
+    "@types/luxon": "^2.0.8",
     "@types/react": "^17.0.38",
+    "@types/uuid": "^8.3.3",
     "autoprefixer": "^10.4.0",
     "eslint": "8.5.0",
     "eslint-config-next": "12.0.7",

@@ -1,14 +1,42 @@
 import PageWrapper from "../../components/page-wrapper";
-import React from "react";
+import React, {ChangeEvent, useCallback, useMemo, useState} from "react";
 import Button from "../../components/button";
 import GoBackButton from "../../components/go-back-button";
+import useEncryption from "../../lib/encryption/use-encryption";
+import uploadText from "../../lib/api/upload-test";
 
 const Text: React.FC = () => {
+  const { encrypt } = useEncryption();
+  const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const encryptText = useCallback(async () => {
+    const { encryptedData, keyIv } = encrypt(text);
+    setIsLoading(true);
+    try {
+    const uploadedTextIdentifier = await uploadText(encryptedData);
+    setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+      setIsLoading(false);
+      return;
+    }
+  }, [encrypt, text]);
+
+  const textUpdated = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  }, []);
+
+  const canGenerateLink = useMemo(() => {
+    return !!text.trim() && text.trim().length <= 2000;
+  }, [text]);
+
   return (
     <PageWrapper>
       <div className="flex flex-col px-4 py-4 w-full">
         <textarea
-          autoFocus
+          onChange={textUpdated}
+          value={text}
           id="about"
           name="about"
           rows={8}
@@ -18,7 +46,7 @@ const Text: React.FC = () => {
           visible only one time before being deleted.</p>
         <div className='flex justify-between items-center mt-2'>
           <GoBackButton />
-          <Button>
+          <Button onClick={encryptText} disabled={!canGenerateLink || isLoading}>
             Get a self-destructive Link
           </Button>
         </div>
