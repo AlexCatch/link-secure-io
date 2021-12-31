@@ -4,18 +4,22 @@ import Button from "../../components/button";
 import GoBackButton from "../../components/go-back-button";
 import useEncryption from "../../lib/encryption/use-encryption";
 import uploadText from "../../lib/api/upload-test";
+import ViewLink from "../../components/view-link";
+import constructLink from "../../lib/utils/construct-link";
 
 const Text: React.FC = () => {
-  const { encrypt } = useEncryption();
+  const {encrypt} = useEncryption();
   const [text, setText] = useState("");
+  const [link, setLink] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
   const encryptText = useCallback(async () => {
-    const { encryptedData, keyIv } = encrypt(text);
+    const {encryptedData, keyIv} = encrypt(text);
     setIsLoading(true);
     try {
-    const uploadedTextIdentifier = await uploadText(encryptedData);
-    setIsLoading(false);
+      const uploadedTextIdentifier = await uploadText(encryptedData);
+      setIsLoading(false);
+      setLink(constructLink(uploadedTextIdentifier, keyIv));
     } catch (err) {
       console.log(err);
       setIsLoading(false);
@@ -34,22 +38,30 @@ const Text: React.FC = () => {
   return (
     <PageWrapper>
       <div className="flex flex-col px-4 py-4 w-full">
-        <textarea
-          onChange={textUpdated}
-          value={text}
-          id="about"
-          name="about"
-          rows={8}
-          className="w-full resize-none dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300 outline-none dark:focus:border-indigo-400 p-3 shadow-sm block w-full focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-gray-700"
-        />
-        <p className="mt-2 text-sm">Text is encrypted client-side, generated links will work for 24 hours and are
-          visible only one time before being deleted.</p>
-        <div className='flex justify-between items-center mt-2'>
-          <GoBackButton />
-          <Button onClick={encryptText} disabled={!canGenerateLink || isLoading}>
-            Get a self-destructive Link
-          </Button>
-        </div>
+        {!!link ?
+          (<ViewLink
+            link={link}/>) :
+          (
+            <>
+              <textarea
+                onChange={textUpdated}
+                value={text}
+                id="about"
+                name="about"
+                rows={8}
+                className="w-full resize-none dark:bg-gray-900 dark:border-gray-600 dark:text-gray-300 outline-none dark:focus:border-indigo-400 p-3 shadow-sm block w-full focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md text-gray-700"
+              />
+              <p className="mt-2 text-sm">Text is encrypted client-side, generated links will work for 24 hours and are
+                visible only one time before being deleted.</p>
+              <div className='flex justify-between items-center mt-2'>
+                <GoBackButton/>
+                <Button onClick={encryptText} disabled={!canGenerateLink || isLoading}>
+                  Get a self-destructive Link
+                </Button>
+              </div>
+            </>
+          )
+        }
       </div>
     </PageWrapper>
   );
