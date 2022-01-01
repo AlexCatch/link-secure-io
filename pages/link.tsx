@@ -62,12 +62,9 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   }
 
   try {
-    const { data, type } = await lookupEncryptedData(id);
+    const { type } = await lookupEncryptedData(id);
     // Verify our HMAC before showing our view
-    console.log(verifyToken);
-    console.log(data);
-    console.log(token);
-    if (!verifyHMAC(verifyToken, data, token)) {
+    if (!verifyHMAC(verifyToken, id, token)) {
       return {
         redirect: {
           permanent: false,

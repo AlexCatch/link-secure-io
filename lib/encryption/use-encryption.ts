@@ -8,13 +8,13 @@ const saltSize = 128;
 const iterations = 100;
 
 type UseEncryptionReturnType = {
-  encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string, hmac: string },
+  encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string},
   createWordArray: (buffer: number[]) => CryptoJS.lib.WordArray,
   decrypt: (keyIv: string, encryptedData: string, hmac: string) => string | undefined;
 };
 
 const useEncryption = (): UseEncryptionReturnType => {
-  const { generateHMAC, validateHMAC } = useHMAC();
+  const { validateHMAC } = useHMAC();
 
   const encrypt = useCallback((data: CryptoJS.lib.WordArray | string) => {
     const salt = CryptoJS.lib.WordArray.random(saltSize / 8);
@@ -33,14 +33,12 @@ const useEncryption = (): UseEncryptionReturnType => {
     });
 
     const keyIv = iv.toString() + key.toString();
-    const hmac = generateHMAC(encrypted.toString(), keyIv);
 
     return {
       keyIv,
       encryptedData: encrypted.toString(),
-      hmac,
     };
-  }, [generateHMAC]);
+  }, []);
 
   const decrypt = useCallback((keyIv: string, encryptedData: string, hmac: string) => {
     const iv = CryptoJS.enc.Hex.parse(keyIv.substring(0, 32));

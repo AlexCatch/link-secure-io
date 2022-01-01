@@ -6,18 +6,21 @@ import useEncryption from "../../lib/encryption/use-encryption";
 import uploadText from "../../lib/api/upload-text";
 import ViewLink from "../../components/view-link";
 import constructLink from "../../lib/utils/construct-link";
+import useHMAC from "../../lib/encryption/use-hmac";
 
 const Text: React.FC = () => {
   const {encrypt} = useEncryption();
+  const { generateHMAC } = useHMAC();
   const [text, setText] = useState("");
   const [link, setLink] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
 
   const encryptText = useCallback(async () => {
-    const { encryptedData, keyIv, hmac } = encrypt(text);
+    const { encryptedData, keyIv } = encrypt(text);
     setIsLoading(true);
     try {
       const uploadedTextIdentifier = await uploadText(encryptedData);
+      const hmac = generateHMAC(uploadedTextIdentifier, keyIv);
       setIsLoading(false);
       setLink(constructLink(uploadedTextIdentifier, keyIv, hmac));
     } catch (err) {
