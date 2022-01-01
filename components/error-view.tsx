@@ -11,7 +11,7 @@ const ErrorView: React.FC = () => {
       </svg>
       <div className='mt-2'>
         <p className='dark:text-indigo-400 text-indigo-500 text-xl font-semibold text-center'>It Looks like something went wrong.</p>
-        <p className='text-sm dark:text-gray-300 font-semibold text-center'>You can try again, if that doesn't work it's something that needs fixing so I'm on it.</p>
+        <p className='text-sm dark:text-gray-300 font-semibold text-center'>{"You can try again, if that doesn't work it's something that needs fixing so I'm on it."}</p>
       </div>
     </div>
   );

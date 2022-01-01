@@ -16,8 +16,7 @@ const ViewLink: React.FC<ViewLinkProps> = ({link}) => {
 
   return (
     <div>
-      <p>Below is your self-destructing link, it's valid for 24 hours and it's contents can only be viewed once before
-        self-destructing.</p>
+      <p>{"Below is your self-destructing link, it's valid for 24 hours and it's contents can only be viewed once before self-destructing."}</p>
       <div
         className='flex justify-between items-center dark:bg-gray-900 rounded-md py-2 px-3 mt-3 border border-indigo-300 dark:border-indigo-500 dark:border-indigo-400 mb-2'>
         <p className='inline whitespace-nowrap align-middle text-indigo-500 dark:text-white font-bold overflow-scroll max-w-full mr-2'>{link}</p>
