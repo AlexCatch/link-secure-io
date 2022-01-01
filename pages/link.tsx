@@ -3,6 +3,7 @@ import {lookupEncryptedData} from "../lib/fauna/lookup-encrypted-data";
 import PageWrapper from "../components/page-wrapper";
 import {useMemo} from "react";
 import Button from "../components/button";
+import {verifyHMAC} from "../lib/utils/hmac";
 
 type LinkProps = {
   id: string;
@@ -49,8 +50,9 @@ export default function Link({ id, token, type }: LinkProps) {
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const id = query.id as string;
   const token = query.token as string;
+  const verifyToken = query.verif as string;
 
-  if (!id || !token) {
+  if (!id || !token || !verifyToken) {
     return {
       redirect: {
         permanent: false,
@@ -60,7 +62,19 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   }
 
   try {
-    const { type } = await lookupEncryptedData(id);
+    const { data, type } = await lookupEncryptedData(id);
+    // Verify our HMAC before showing our view
+    console.log(verifyToken);
+    console.log(data);
+    console.log(token);
+    if (!verifyHMAC(verifyToken, data, token)) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: "/",
+        },
+      };
+    }
     return { props: { id, token, type } };
   } catch (error) {
     if (error.requestResult?.statusCode == 404) {

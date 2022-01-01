@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import {render, screen} from "@testing-library/react";
 import {expect} from "@jest/globals";
 
@@ -10,6 +10,7 @@ const testID = {
 
   encryptedValue: 'encryptedValue',
   keyIv: 'keyIv',
+  hmac: 'hmac',
   decryptedValue: 'decryptedValue',
 };
 
@@ -18,17 +19,19 @@ const TestComponent = () => {
   const [encryptedValue, setEncryptedValue] = useState<string | undefined>();
   const [keyIv, setKeyIv] = useState<string | undefined>();
   const [decryptedValue, setDecryptedValue] = useState<string | undefined>();
+  const [hmac, setHMAC] = useState<string | undefined>();
 
   const encryptData = useCallback(() => {
-    const {keyIv, encryptedData} = encrypt("hello world");
+    const {keyIv, encryptedData, hmac} = encrypt("hello world");
     setEncryptedValue(encryptedData);
     setKeyIv(keyIv);
+    setHMAC(hmac);
   }, [encrypt]);
 
   const decryptData = useCallback(() => {
-    const decryptedValue = decrypt(keyIv, encryptedValue);
+    const decryptedValue = decrypt(keyIv, encryptedValue, hmac);
     setDecryptedValue(decryptedValue);
-  }, [decrypt, encryptedValue, keyIv]);
+  }, [decrypt, encryptedValue, hmac, keyIv]);
 
   return (
     <div>
@@ -45,6 +48,7 @@ const TestComponent = () => {
       <div>
         <p data-testid={testID.encryptedValue}>{encryptedValue}</p>
         <p data-testid={testID.keyIv}>{keyIv}</p>
+        <p data-testid={testID.hmac}>{hmac}</p>
         <p data-testid={testID.decryptedValue}>{decryptedValue}</p>
       </div>
     </div>
@@ -52,7 +56,7 @@ const TestComponent = () => {
 }
 
 describe('use-encryption', () => {
-  it('correctly encrypts text', () => {
+  it('correctly encrypts and decrypts text', () => {
     render(<TestComponent />);
 
     const encryptButton = screen.getByTestId(testID.encryptButton);

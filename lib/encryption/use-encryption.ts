@@ -10,7 +10,7 @@ const iterations = 100;
 type UseEncryptionReturnType = {
   encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string, hmac: string },
   createWordArray: (buffer: number[]) => CryptoJS.lib.WordArray,
-  decrypt: (keyIv: string, encryptedData: string) => string;
+  decrypt: (keyIv: string, encryptedData: string, hmac: string) => string | undefined;
 };
 
 const useEncryption = (): UseEncryptionReturnType => {
@@ -32,18 +32,24 @@ const useEncryption = (): UseEncryptionReturnType => {
       mode: CryptoJS.mode.CBC
     });
 
-    const hmac = generateHMAC(encrypted.toString(), key.toString());
+    const keyIv = iv.toString() + key.toString();
+    const hmac = generateHMAC(encrypted.toString(), keyIv);
 
     return {
-      keyIv: iv.toString() + key.toString(),
+      keyIv,
       encryptedData: encrypted.toString(),
       hmac,
     };
   }, [generateHMAC]);
 
-  const decrypt = useCallback((keyIv: string, encryptedData: string) => {
+  const decrypt = useCallback((keyIv: string, encryptedData: string, hmac: string) => {
     const iv = CryptoJS.enc.Hex.parse(keyIv.substring(0, 32));
     const key = CryptoJS.enc.Hex.parse(keyIv.substring(32, 96));
+
+    if (!validateHMAC(hmac, encryptedData, key.toString())) {
+      // HMAC is invalid so the decryption will fail
+      return null;
+    }
 
     const decryptedHex = CryptoJS.AES.decrypt(encryptedData, key, {
       iv,
@@ -52,7 +58,7 @@ const useEncryption = (): UseEncryptionReturnType => {
     });
 
     return decryptedHex.toString(CryptoJS.enc.Utf8);
-  }, []);
+  }, [validateHMAC]);
 
 
   const createWordArray = useCallback((buffer: number[]) => {
