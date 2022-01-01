@@ -1,5 +1,6 @@
 import {useCallback} from "react";
 import CryptoJS from 'crypto-js';
+import useHMAC from "./use-hmac";
 
 const keySize = 256;
 const ivSize = 128;
@@ -7,12 +8,14 @@ const saltSize = 128;
 const iterations = 100;
 
 type UseEncryptionReturnType = {
-  encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string },
+  encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string, hmac: string },
   createWordArray: (buffer: number[]) => CryptoJS.lib.WordArray,
   decrypt: (keyIv: string, encryptedData: string) => string;
 };
 
 const useEncryption = (): UseEncryptionReturnType => {
+  const { generateHMAC, validateHMAC } = useHMAC();
+
   const encrypt = useCallback((data: CryptoJS.lib.WordArray | string) => {
     const salt = CryptoJS.lib.WordArray.random(saltSize / 8);
     const password = CryptoJS.lib.WordArray.random(keySize / 32);
@@ -29,11 +32,14 @@ const useEncryption = (): UseEncryptionReturnType => {
       mode: CryptoJS.mode.CBC
     });
 
+    const hmac = generateHMAC(encrypted.toString(), key.toString());
+
     return {
       keyIv: iv.toString() + key.toString(),
       encryptedData: encrypted.toString(),
+      hmac,
     };
-  }, []);
+  }, [generateHMAC]);
 
   const decrypt = useCallback((keyIv: string, encryptedData: string) => {
     const iv = CryptoJS.enc.Hex.parse(keyIv.substring(0, 32));

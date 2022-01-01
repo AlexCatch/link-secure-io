@@ -20,12 +20,21 @@ export default function Link({ id, token, type }: LinkProps) {
     }
   }, [type]);
 
+  const buttonText = useMemo(() => {
+    switch (type) {
+      case "file":
+        return "Download file"
+      case "text":
+        return "View contents"
+    }
+  }, [type]);
+
   return (
     <PageWrapper>
       <div className="flex flex-col px-4 py-4 w-full">
-        {typeText}
+        <p className='text-white'>{typeText}</p>
         <Button className='mt-3'>
-          View contents
+          {buttonText}
         </Button>
       </div>
     </PageWrapper>

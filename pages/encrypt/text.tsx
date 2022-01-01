@@ -3,7 +3,7 @@ import React, {ChangeEvent, useCallback, useMemo, useState} from "react";
 import Button from "../../components/button";
 import GoBackButton from "../../components/go-back-button";
 import useEncryption from "../../lib/encryption/use-encryption";
-import uploadText from "../../lib/api/upload-test";
+import uploadText from "../../lib/api/upload-text";
 import ViewLink from "../../components/view-link";
 import constructLink from "../../lib/utils/construct-link";
 
@@ -14,14 +14,14 @@ const Text: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const encryptText = useCallback(async () => {
-    const {encryptedData, keyIv} = encrypt(text);
+    const { encryptedData, keyIv, hmac } = encrypt(text);
     setIsLoading(true);
     try {
       const uploadedTextIdentifier = await uploadText(encryptedData);
       setIsLoading(false);
-      setLink(constructLink(uploadedTextIdentifier, keyIv));
+      setLink(constructLink(uploadedTextIdentifier, keyIv, hmac));
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setIsLoading(false);
       return;
     }
