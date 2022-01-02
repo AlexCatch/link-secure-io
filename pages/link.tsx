@@ -44,7 +44,7 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
       setLoading(true);
       const data = await fetchContent(id, type, token, verifyToken);
       if (!data) {
-        return router.push('/error');
+        return router.replace('/error');
       }
       switch (type) {
         case "text":
@@ -60,13 +60,12 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
       return (
         <>
           <TextArea value={text} disabled className='border-indigo-500 cursor-text' />
-          <p className='text-sm mt-2'>Once you leave this page the text above will be destroyed.</p>
         </>
       );
     }
     return (
       <>
-        <p className='text-white'>{typeText}</p>
+        <p className='text-white dark:text-gray-400'>{typeText}</p>
         <Button disabled={isLoading} onClick={fetch} className='mt-3'>
           {buttonText}
         </Button>
