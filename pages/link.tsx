@@ -19,6 +19,7 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
   const { fetchContent } = useData();
   const router = useRouter();
   const [text, setText] = useState<string | undefined>();
+  const [isLoading, setLoading] = useState(false);
 
   const typeText = useMemo(() => {
     switch (type) {
@@ -40,6 +41,7 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
 
   const fetch = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await fetchContent(id, type, token, verifyToken);
       if (!data) {
         return router.push('/error');
@@ -55,17 +57,22 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
 
   const pageContent = useMemo(() => {
     if (!!text) {
-      return  <TextArea value={text} disabled className='border-indigo-500' />
+      return (
+        <>
+          <TextArea value={text} disabled className='border-indigo-500 cursor-text' />
+          <p className='text-sm mt-2'>Once you leave this page the text above will be destroyed.</p>
+        </>
+      );
     }
     return (
       <>
         <p className='text-white'>{typeText}</p>
-        <Button onClick={fetch} className='mt-3'>
+        <Button disabled={isLoading} onClick={fetch} className='mt-3'>
           {buttonText}
         </Button>
       </>
     );
-  }, [buttonText, fetch, text, typeText]);
+  }, [buttonText, fetch, isLoading, text, typeText]);
 
   return (
     <PageWrapper>
