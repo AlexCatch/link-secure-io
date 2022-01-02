@@ -1,6 +1,5 @@
 import {useCallback} from "react";
 import CryptoJS from 'crypto-js';
-import useHMAC from "./use-hmac";
 
 const keySize = 256;
 const ivSize = 128;
