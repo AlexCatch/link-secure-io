@@ -10,7 +10,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head title='LinkSecure.io' />
-        <body className='antialiased text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 selection:bg-indigo-500'>
+        <body className='antialiased text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-900 selection:bg-indigo-500 selection:text-white'>
         <Main />
         <NextScript />
         </body>

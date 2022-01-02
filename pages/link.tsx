@@ -65,7 +65,7 @@ export default function Link({ id, token, type, verifyToken }: LinkProps) {
     }
     return (
       <>
-        <p className='text-white dark:text-gray-400'>{typeText}</p>
+        <p className='dark:text-white'>{typeText}</p>
         <Button disabled={isLoading} onClick={fetch} className='mt-3'>
           {buttonText}
         </Button>
