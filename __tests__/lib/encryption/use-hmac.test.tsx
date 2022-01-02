@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react";
 import {cleanup, render, screen} from "@testing-library/react";
 import {expect} from "@jest/globals";
-import useHMAC from "../../../lib/encryption/use-hmac";
+import useHMAC from "../../../lib/hooks/encryption/use-hmac";
 
 const testID = {
   generateHMACButton: 'generateHMACButton',

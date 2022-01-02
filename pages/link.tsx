@@ -1,17 +1,25 @@
 import {GetServerSidePropsContext} from "next";
 import {lookupEncryptedData} from "../lib/fauna/lookup-encrypted-data";
 import PageWrapper from "../components/page-wrapper";
-import {useMemo} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import Button from "../components/button";
 import {verifyHMAC} from "../lib/utils/hmac";
+import useData from "../lib/hooks/use-data";
+import {useRouter} from "next/router";
+import TextArea from "../components/text-area";
 
 type LinkProps = {
   id: string;
   token: string;
-  type: string;
+  type: 'file' | 'text';
+  verifyToken: string;
 }
 
-export default function Link({ id, token, type }: LinkProps) {
+export default function Link({ id, token, type, verifyToken }: LinkProps) {
+  const { fetchContent } = useData();
+  const router = useRouter();
+  const [text, setText] = useState<string | undefined>();
+
   const typeText = useMemo(() => {
     switch (type) {
       case "file":
@@ -30,13 +38,39 @@ export default function Link({ id, token, type }: LinkProps) {
     }
   }, [type]);
 
+  const fetch = useCallback(async () => {
+    try {
+      const data = await fetchContent(id, type, token, verifyToken);
+      if (!data) {
+        return router.push('/error');
+      }
+      switch (type) {
+        case "text":
+          setText(data);
+      }
+    } catch (e) {
+      return router.replace('/error');
+    }
+  }, [fetchContent, id, router, token, type, verifyToken]);
+
+  const pageContent = useMemo(() => {
+    if (!!text) {
+      return  <TextArea value={text} disabled className='border-indigo-500' />
+    }
+    return (
+      <>
+        <p className='text-white'>{typeText}</p>
+        <Button onClick={fetch} className='mt-3'>
+          {buttonText}
+        </Button>
+      </>
+    );
+  }, [buttonText, fetch, text, typeText]);
+
   return (
     <PageWrapper>
       <div className="flex flex-col px-4 py-4 w-full">
-        <p className='text-white'>{typeText}</p>
-        <Button className='mt-3'>
-          {buttonText}
-        </Button>
+        {pageContent}
       </div>
     </PageWrapper>
   );
@@ -72,7 +106,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
         },
       };
     }
-    return { props: { id, token, type } };
+    return { props: { id, token, type, verifyToken } };
   } catch (error) {
     if (error.requestResult?.statusCode == 404) {
       return {

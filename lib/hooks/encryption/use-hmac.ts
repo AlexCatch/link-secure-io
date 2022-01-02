@@ -1,6 +1,6 @@
 import {useCallback} from "react";
 import CryptoJS from 'crypto-js';
-import {verifyHMAC} from "../utils/hmac";
+import {verifyHMAC} from "../../utils/hmac";
 
 const useHMAC = () => {
   const generateHMAC = useCallback((value: string, key: string): string => {

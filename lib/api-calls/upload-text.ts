@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /**
- * Take our locally encrypted text and post it to our api endpoint
+ * Take our locally encrypted text and post it to our api-calls endpoint
  * for creating our document
  * @param text
  */
