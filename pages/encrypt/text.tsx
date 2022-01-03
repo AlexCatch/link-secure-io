@@ -17,11 +17,11 @@ const Text: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const encryptText = useCallback(async () => {
-    const { encryptedData, keyIv } = encrypt(text, 'text');
+    const { encryptedData, keyIv } = encrypt<string>(text, 'text');
     setIsLoading(true);
 
     try {
-      const uploadedTextIdentifier = await uploadText(encryptedData as string);
+      const uploadedTextIdentifier = await uploadText(encryptedData);
       const hmac = generateHMAC(uploadedTextIdentifier, keyIv);
       setLink(constructLink(uploadedTextIdentifier, keyIv, hmac));
     } catch (err) {

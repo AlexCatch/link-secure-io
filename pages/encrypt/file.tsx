@@ -27,7 +27,7 @@ const File: React.FC = () => {
     fileReader.onload = async () => {
       const wordArray = createWordArray(fileReader.result as ArrayBuffer);
       console.log(wordArray);
-      const { encryptedData, keyIv } = encrypt(wordArray, 'file');
+      const { encryptedData, keyIv } = encrypt<Uint16Array>(wordArray, 'file');
       const encryptedBlob = new Blob([encryptedData]);
 
       try {

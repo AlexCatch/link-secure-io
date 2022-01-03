@@ -7,13 +7,13 @@ const saltSize = 128;
 const iterations = 100;
 
 type UseEncryptionReturnType = {
-  encrypt: (data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => { keyIv: string, encryptedData: string | Uint8Array },
+  encrypt: <T extends string | Uint16Array>(data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => { keyIv: string, encryptedData: T },
   createWordArray: (buffer: ArrayBuffer) => CryptoJS.lib.WordArray,
   decrypt: (keyIv: string, encryptedData: string) => string;
 };
 
 const useEncryption = (): UseEncryptionReturnType => {
-  const encrypt = useCallback((data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => {
+  const encrypt = useCallback(<T extends string | Uint16Array>(data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => {
     const salt = CryptoJS.lib.WordArray.random(saltSize / 8);
     const password = CryptoJS.lib.WordArray.random(keySize / 32);
     const iv = CryptoJS.lib.WordArray.random(ivSize / 8);
@@ -33,7 +33,7 @@ const useEncryption = (): UseEncryptionReturnType => {
 
     return {
       keyIv,
-      encryptedData: type == 'text' ? encrypted.toString() : new Uint8Array(encrypted.ciphertext.words),
+      encryptedData: (type == 'text' ? encrypted.toString() : new Uint16Array(encrypted.ciphertext.words)) as T,
     };
   }, []);
 

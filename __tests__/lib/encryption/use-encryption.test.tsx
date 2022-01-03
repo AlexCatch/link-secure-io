@@ -20,7 +20,7 @@ const TestComponent = () => {
   const [decryptedValue, setDecryptedValue] = useState<string | undefined>();
 
   const encryptData = useCallback(() => {
-    const {keyIv, encryptedData} = encrypt("hello world");
+    const {keyIv, encryptedData} = encrypt<string>("hello world", "text");
     setEncryptedValue(encryptedData);
     setKeyIv(keyIv);
   }, [encrypt]);
