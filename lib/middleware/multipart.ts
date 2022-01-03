@@ -1,5 +1,5 @@
 import nextConnect from 'next-connect'
-import { IncomingForm, Files, File } from 'formidable';
+import { IncomingForm, File } from 'formidable';
 import {NextApiRequest, NextApiResponse} from "next";
 
 export type NextApiRequestWithFiles = NextApiRequest & {

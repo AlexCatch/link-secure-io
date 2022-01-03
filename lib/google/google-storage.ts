@@ -1,6 +1,11 @@
-import { Storage } from '@google-cloud/storage';
+import { Storage, File } from '@google-cloud/storage';
 
-const uploadFile = async (path) => {
+/**
+ * Upload a file at the given path to GCP Storage and return
+ * the file name
+ * @param path
+ */
+const uploadFile = async (path: string): Promise<string> => {
   const storage = new Storage({
     projectId: process.env.GCP_BUCKET_NAME,
     credentials: {
@@ -11,7 +16,8 @@ const uploadFile = async (path) => {
   });
 
   const bucket = storage.bucket(process.env.GCP_BUCKET_NAME);
-  await bucket.upload(path);
+  const [file] = await bucket.upload(path);
+  return file.name;
 }
 
 export {

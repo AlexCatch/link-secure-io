@@ -15,7 +15,7 @@ const uploadFile = async (fileName: string, file: Blob): Promise<string> => {
     }
   };
   const { data } = await axios.post('/api/upload/file', formData, config);
-  return "hello world"
+  return data.id;
 };
 
 export default uploadFile;

@@ -19,16 +19,15 @@ const Text: React.FC = () => {
   const encryptText = useCallback(async () => {
     const { encryptedData, keyIv } = encrypt(text, 'text');
     setIsLoading(true);
+
     try {
       const uploadedTextIdentifier = await uploadText(encryptedData as string);
       const hmac = generateHMAC(uploadedTextIdentifier, keyIv);
-      setIsLoading(false);
       setLink(constructLink(uploadedTextIdentifier, keyIv, hmac));
     } catch (err) {
       console.error(err);
-      setIsLoading(false);
-      return;
     }
+    setIsLoading(false);
   }, [encrypt, generateHMAC, text]);
 
   const textUpdated = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -53,11 +52,11 @@ const Text: React.FC = () => {
                 rows={8}
               />
               <p className="mt-2 text-sm">Text is encrypted client-side, generated links will work for 24 hours and are
-                visible only one time before being deleted.</p>
+                visible only one time before being deleted. Max 2000 characters.</p>
               <div className='flex justify-between items-center mt-2'>
                 <GoBackButton />
                 <Button onClick={encryptText} disabled={!canGenerateLink || isLoading}>
-                  Get a self-destructive Link
+                  {isLoading ? "Encrypting and generating link..." : "Get a self-destructive Link"}
                 </Button>
               </div>
             </>

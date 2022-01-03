@@ -52,8 +52,9 @@ const useEncryption = (): UseEncryptionReturnType => {
 
 
   const createWordArray = useCallback((buffer: ArrayBuffer) => {
-    const uint8Array = new Uint8Array(buffer);
-    return CryptoJS.lib.WordArray.create(Array.from(uint8Array));
+    // It seems like there is a type conflict here so the cast to unknown is needed
+    const bytes = buffer as unknown as number[];
+    return CryptoJS.lib.WordArray.create(bytes);
   }, []);
 
   return {

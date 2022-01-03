@@ -2,11 +2,12 @@ import {NextApiRequest, NextApiResponse, NextConfig} from "next";
 import nextConnect from 'next-connect';
 import multipart, {NextApiRequestWithFiles} from "../../../lib/middleware/multipart";
 import {uploadFile} from "../../../lib/google/google-storage";
+import createFile from "../../../lib/fauna/create-file";
 
 export const config: NextConfig = {
   api: {
     bodyParser: false,
-    sizeLimit: '10mb',
+    sizeLimit: '10.1mb',
   },
 };
 
@@ -24,13 +25,22 @@ apiRoute.post(async (req: NextApiRequestWithFiles, res) => {
     return res.status(400).json(null);
   }
 
-  try {
-    await uploadFile(req.file.filepath);
-  } catch (err) {
-    console.log(err);
-  }
+  const file = req.file;
 
-  return res.status(200).json({ data: 'success' });
+  try {
+    const uploadedFileName = await uploadFile(file.filepath);
+    const createdIdentifier = await createFile(file.originalFilename, uploadedFileName);
+    return res.json({
+      id: createdIdentifier,
+    });
+  } catch (err) {
+    console.error(err);
+    let statusCode = 500;
+    if (err.requestResult?.statusCode) {
+      statusCode = err.requestResult.statusCode;
+    }
+    return res.status(statusCode).send(null);
+  }
 });
 
 export default apiRoute;

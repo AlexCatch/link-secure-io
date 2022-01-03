@@ -2,7 +2,7 @@ import {Collection, Create, Time} from "faunadb";
 import {DateTime} from "luxon";
 import client from "./client";
 
-type CreatedTextResult = {
+type CreatedTextData = {
   ref: {
     id: string
   },
@@ -15,7 +15,7 @@ type CreatedTextResult = {
  * @param text
  */
 const createText = async (text: string): Promise<string> => {
-  const { ref } = await client.query<CreatedTextResult>(
+  const { ref } = await client.query<CreatedTextData>(
     Create(
       Collection('encrypted_data'),
       {
