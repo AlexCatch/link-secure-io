@@ -3,14 +3,29 @@ import PageWrapper from "../../components/page-wrapper";
 import Button from "../../components/button";
 import GoBackButton from "../../components/go-back-button";
 import FileUpload from "../../components/file-upload";
+import useEncryption from "../../lib/hooks/encryption/use-encryption";
+import {Simulate} from "react-dom/test-utils";
+import encrypted = Simulate.encrypted;
+import uploadFile from "../../lib/api-calls/upload-file";
 
 const File: React.FC = () => {
+  const { encrypt, createWordArray } = useEncryption();
   const [file, setFile] = useState<File | undefined>();
 
   const onFileSelected = useCallback((file: File) => {
-    console.log('set file');
     setFile(file);
   }, []);
+
+  const encryptFile = useCallback(async () => {
+    const fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(file);
+    fileReader.onload = async () => {
+      const wordArray = createWordArray(fileReader.result as ArrayBuffer);
+      const { encryptedData, keyIv } = encrypt(wordArray, 'file');
+      const encryptedBlob = new Blob([encryptedData]);
+      await uploadFile(file.name, encryptedBlob);
+    }
+  }, [createWordArray, encrypt, file]);
 
   const isButtonEnabled = useMemo(() => {
     return !!file;
@@ -24,7 +39,7 @@ const File: React.FC = () => {
           visible only one time before being deleted.</p>
         <div className='flex justify-between items-center mt-2'>
           <GoBackButton />
-          <Button disabled={!isButtonEnabled}>
+          <Button onClick={encryptFile} disabled={!isButtonEnabled}>
             Get a self-destructive Link
           </Button>
         </div>

@@ -34,7 +34,7 @@ const IconLink: React.FC<IconLinkProps> = ({ type, link }) => {
   }, [type]);
 
   return (
-    <a data-testid="icon-link" target="_blank" href={link} rel="noreferrer">
+    <a className="p-1 lg:p-0" data-testid="icon-link" target="_blank" href={link} rel="noreferrer">
       {iconSVG}
     </a>
   );

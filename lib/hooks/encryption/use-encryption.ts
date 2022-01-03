@@ -7,13 +7,13 @@ const saltSize = 128;
 const iterations = 100;
 
 type UseEncryptionReturnType = {
-  encrypt: (data: CryptoJS.lib.WordArray | string) => { keyIv: string, encryptedData: string},
-  createWordArray: (buffer: number[]) => CryptoJS.lib.WordArray,
+  encrypt: (data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => { keyIv: string, encryptedData: string | Uint8Array },
+  createWordArray: (buffer: ArrayBuffer) => CryptoJS.lib.WordArray,
   decrypt: (keyIv: string, encryptedData: string) => string;
 };
 
 const useEncryption = (): UseEncryptionReturnType => {
-  const encrypt = useCallback((data: CryptoJS.lib.WordArray | string) => {
+  const encrypt = useCallback((data: CryptoJS.lib.WordArray | string, type: 'file' | 'text') => {
     const salt = CryptoJS.lib.WordArray.random(saltSize / 8);
     const password = CryptoJS.lib.WordArray.random(keySize / 32);
     const iv = CryptoJS.lib.WordArray.random(ivSize / 8);
@@ -33,7 +33,7 @@ const useEncryption = (): UseEncryptionReturnType => {
 
     return {
       keyIv,
-      encryptedData: encrypted.toString(),
+      encryptedData: type == 'text' ? encrypted.toString() : new Uint8Array(encrypted.ciphertext.words),
     };
   }, []);
 
@@ -51,8 +51,9 @@ const useEncryption = (): UseEncryptionReturnType => {
   }, []);
 
 
-  const createWordArray = useCallback((buffer: number[]) => {
-    return CryptoJS.lib.WordArray.create(buffer);
+  const createWordArray = useCallback((buffer: ArrayBuffer) => {
+    const uint8Array = new Uint8Array(buffer);
+    return CryptoJS.lib.WordArray.create(Array.from(uint8Array));
   }, []);
 
   return {

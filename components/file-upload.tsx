@@ -50,7 +50,7 @@ const FileUpload: React.FC<FileUploadProps> = ({onFileSelected}) => {
       className="w-full flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-400 border-dashed rounded-md" {...getRootProps()}>
       <div className="flex items-center justify-content flex-col w-full">
         {!!file ? (
-          <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-gray-400" fill="none"
+          <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-12 w-12 text-indigo-500 dark:text-indigo-400" fill="none"
                viewBox="0 0 24 24"
                stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -99,13 +99,13 @@ const FileUpload: React.FC<FileUploadProps> = ({onFileSelected}) => {
             </>
           )}
         </div>
-        <p className="text-xs">{!!file ? readableFileSize : (!!error ? (<label
+        <p className="text-xs text-indigo-500 dark:text-indigo-400">{!!file ? readableFileSize : (!!error ? (<label
             onClick={open}
-            className="relative cursor-pointer font-medium text-indigo-500 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 outline-none"
+            className="relative cursor-pointer font-medium hover:text-indigo-500 dark:hover:text-indigo-300 outline-none"
           >
             <span>Encrypt a file</span>
           </label>) : "up to 10MB in size")}</p>
-        <input {...getInputProps()} className="sr-only"/>
+        <input {...getInputProps()} className="sr-only outline-none" />
       </div>
     </div>
   );

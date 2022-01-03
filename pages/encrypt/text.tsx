@@ -17,10 +17,10 @@ const Text: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const encryptText = useCallback(async () => {
-    const { encryptedData, keyIv } = encrypt(text);
+    const { encryptedData, keyIv } = encrypt(text, 'text');
     setIsLoading(true);
     try {
-      const uploadedTextIdentifier = await uploadText(encryptedData);
+      const uploadedTextIdentifier = await uploadText(encryptedData as string);
       const hmac = generateHMAC(uploadedTextIdentifier, keyIv);
       setIsLoading(false);
       setLink(constructLink(uploadedTextIdentifier, keyIv, hmac));
@@ -29,7 +29,7 @@ const Text: React.FC = () => {
       setIsLoading(false);
       return;
     }
-  }, [encrypt, text]);
+  }, [encrypt, generateHMAC, text]);
 
   const textUpdated = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
